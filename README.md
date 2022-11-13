@@ -1,4 +1,4 @@
-# Nhom28-API-Testing
+# Nhom28-POSTMAN-API-Testing
 Deploy Code sử dụng Postman API Testing của Nhóm 28
 
 Nhóm gồm 3 thành viên : 
