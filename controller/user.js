@@ -83,66 +83,45 @@ const login = async (req, res) => {
 
 }
 
-const takeAllDataUser = async (req, res) => {
-    let user = await user.findAll();
-
-    return res.json(user);
-}
 
 const getUserInfo = async (req, res) => {
     let username;
     jwt.verify(req.headers['authorization'], process.env.ACCESS_TOKEN_SECRET, (err, data) => {
         username = data.username;
     });
-    let info = await userInfo.findOne({
-        where: {
-            username: username
-        }
-    });
+    let info = await userInfo.findByPk(username);
     res.json(info);
 }
 
 const setUserInfo = async (req, res) => {
-    // let userInfoFrom = Joi.object({
-    //     phoneNumber: Joi.number().required(),
-    //     fullName: Joi.string().required(),
-    //     nationalName: Joi.string().required()
-    // });
     const { body } = req;
-    // if (userInfoFrom.validate(body)) { 
-    //     return res.status(400).send(userInfoFrom.validate(body));
-    // };
     let username;
+
     jwt.verify(req.headers['authorization'], process.env.ACCESS_TOKEN_SECRET, (err, data) => {
         username = data.username;
     });
 
-    let user = await userInfo.findOne({
-        where: {
-            username: username
-        }
-    });
+    let user = await userInfo.findByPk(username);
 
     if (user) {
         user.phoneNumber = body.phoneNumber;
         user.fullName = body.fullName;
         user.nationality = body.nationality;
-        return res.json({ nationality: body.nationality });
-
+        return res.json({ message: "Set information of user successfully" });
     }
+
     await userInfo.create({
         username: username,
         phoneNumber: body.phoneNumber,
         fullName: body.fullName,
         nationality: body.nationality
     });
-    res.json({ phoneNumber: body.phoneNumber });
+    res.json({ message: "Set information of user successfully" });
 }
 
 var userController = {
     register,
     login,
-    takeAllDataUser,
     getUserInfo,
     setUserInfo
 }
